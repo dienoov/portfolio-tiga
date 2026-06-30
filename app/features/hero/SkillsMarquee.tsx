@@ -21,7 +21,7 @@ export default function SkillsMarquee() {
   randomizeSkills();
 
   return (
-    <div className="flex gap-4 text-6xl font-black text-nowrap uppercase opacity-10">
+    <div className="flex gap-4 text-9xl font-black text-nowrap uppercase opacity-10">
       <ul className="flex gap-4">
         {skills.map((skill: string) => (
           <li key={skill} suppressHydrationWarning>

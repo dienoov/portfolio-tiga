@@ -48,24 +48,35 @@ export default function Hero() {
       marqueeRef.current.querySelector("ul")?.getBoundingClientRect().width ??
       0;
 
-    gsap.to(marqueeRef.current.children, {
-      x: -marqueeTextWidth - 16,
-      duration: 30,
-      repeat: -1,
-      ease: "linear",
+    const skillsMarquee = gsap.utils.toArray<HTMLElement>(
+      marqueeRef.current.children
+    );
+    skillsMarquee.forEach((skill: HTMLElement, i: number) => {
+      gsap.fromTo(
+        skill,
+        {
+          x: i % 2 ? -marqueeTextWidth - 16 : 0,
+        },
+        {
+          x: i % 2 ? 0 : -marqueeTextWidth - 16,
+          duration: 70,
+          repeat: -1,
+          ease: "linear",
+        }
+      );
     });
   }, []);
 
   return (
-    <section className="relative grid min-h-screen place-content-center">
+    <section className="relative grid min-h-svh place-content-center overflow-x-clip">
       <h1
-        className="text-center text-5xl font-black uppercase"
+        className="-skew-3 text-center text-5xl font-black uppercase"
         ref={headingRef}
       >
         Full-Stack Developer
       </h1>
       <div
-        className="absolute top-1/2 left-1/2 w-full -translate-1/2 overflow-clip"
+        className="absolute top-1/2 left-1/2 w-full -translate-1/2 skew-3"
         aria-hidden
         ref={marqueeRef}
       >
