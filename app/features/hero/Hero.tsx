@@ -1,23 +1,34 @@
 "use client";
 
-import { gsap } from "gsap";
+import dynamic from "next/dynamic";
+import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
-import dynamic from "next/dynamic";
 
 const SkillsMarquee = dynamic(
   () => import("@/app/features/hero/SkillsMarquee")
 );
 
 export default function Hero() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    if (!headingRef.current || !marqueeRef.current) {
+    if (!containerRef.current || !headingRef.current || !marqueeRef.current) {
       return;
     }
+
+    gsap.to(headingRef.current!, {
+      yPercent: -75,
+      scrollTrigger: {
+        trigger: containerRef.current!,
+        start: "top top",
+        end: "50% top",
+        scrub: true,
+      },
+    });
 
     const tl = gsap.timeline({});
 
@@ -51,6 +62,7 @@ export default function Hero() {
     const skillsMarquee = gsap.utils.toArray<HTMLElement>(
       marqueeRef.current.children
     );
+
     skillsMarquee.forEach((skill: HTMLElement, i: number) => {
       gsap.fromTo(
         skill,
@@ -59,7 +71,7 @@ export default function Hero() {
         },
         {
           x: i % 2 ? 0 : -marqueeTextWidth - 16,
-          duration: 70,
+          duration: 180,
           repeat: -1,
           ease: "linear",
         }
@@ -68,7 +80,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative grid min-h-svh place-content-center overflow-x-clip">
+    <section
+      className="relative grid min-h-svh place-content-center overflow-x-clip"
+      ref={containerRef}
+    >
       <h1
         className="-skew-3 text-center text-5xl font-black uppercase"
         ref={headingRef}
